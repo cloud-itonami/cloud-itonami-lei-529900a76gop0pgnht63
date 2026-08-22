@@ -1,0 +1,365 @@
+;; Verified public-register citations for the legal entity archived by this repository.
+;;
+;; Every row is checked live by tools/verify_citations.cljs:
+;;   * GET :cite/url must answer HTTP 2xx
+;;   * :cite/expect-substring must appear in the response body
+;;
+;; A URL that cannot be fetched, or whose body no longer carries the claim, is a
+;; DRIFT and fails the gate. Nothing is recorded here that was not retrieved
+;; (all rows were fetched and byte-matched on 2026-08-22).
+;;
+;; FOUR independent voices are cited, not one:
+;;   * GLEIF, the global LEI system (api.gleif.org) -- including its resolution
+;;     of registration authority RA000412 (the Legal Affairs Bureau / 法務局,
+;;     Japan's commercial register), of entity legal form T417 (株式会社,
+;;     kabusiki gaisya), and of the managing LOU -- which for this record is
+;;     株式会社東京証券取引所, Tokyo Stock Exchange, Inc. itself
+;;   * the National Tax Agency (国税庁), at its Corporate Number Publication
+;;     Site (houjin-bangou.nta.go.jp) -- the state's own per-entity page for
+;;     corporate number 3180001017428, which also carries the designation date
+;;     and the official reading (フリガナ) the other voices do not have
+;;   * gBizINFO (info.gbiz.go.jp), the Ministry of Economy, Trade and
+;;     Industry's cross-ministry corporate-information aggregator, printing the
+;;     same name, number, and head-office address from a separately operated
+;;     service
+;;   * the issuer itself, at www.chuden.co.jp -- the privacy-policy page this
+;;     repository archives (80-data/public/tos.journal.edn archives
+;;     https://www.chuden.co.jp/privacy/, the same URL row issuer-privacy-title
+;;     cites), its company-outline page, and its IR top page
+;;
+;; HOW THE TWO REGISTRY NUMBERS RELATE (so a reader does not count one voice
+;; twice). GLEIF names RA000412 -- Companies Registration (登記) operated by
+;; the Legal Affairs Bureau (法務局) -- as both register of record and
+;; validation authority, and records registeredAs 1800-01-017428, the
+;; 会社法人等番号 (company registration number) in the registry's own
+;; XXXX-XX-XXXXXX rendering. The National Tax Agency's 法人番号 (corporate
+;; number) 3180001017428 is, by the NTA's published construction, a single
+;; check digit (3) prefixed to those same 12 digits with the hyphens removed
+;; (180001017428). So rows gleif-registered-as / gleif-validated-as /
+;; gleif-ocid and rows nta-corporate-number / gbiz-corporate-number corroborate
+;; one underlying commercial-registry identity through two different state
+;; renderings of it -- and GLEIF's OpenCorporates id jp/3180001017428 prints
+;; the NTA-form number inside the GLEIF body itself.
+;;
+;; SIX HONEST WRINKLES, SO A READER DOES NOT MISREAD THEM AS DRIFT:
+;;   1. GLEIF's creationDate "1951-04-30T15:00:00Z" (row gleif-creation-date)
+;;      and the issuer's founding date 1951年（昭和26年）5月1日 (row
+;;      issuer-profile-founded) are the SAME instant -- UTC rendering of Tokyo
+;;      midnight, JST being UTC+9. Not a disagreement.
+;;   2. The English name arrives in THREE renderings that are one name: GLEIF's
+;;      alternative-language legal name "Chubu Electric Power Co., Inc." (row
+;;      gleif-legal-name-en), the issuer's own company-outline rendering
+;;      "Chubu Electric Power Company,Incorporated" (row issuer-profile-name-en,
+;;      no space after the comma -- cited exactly as the page prints it), and
+;;      the README's "Chubu Electric Power Company, Inc.", which no row below
+;;      asserts. The registered name is the Japanese one; English is decoration
+;;      each voice renders its own way.
+;;   3. The head-office address arrives in three renderings that are one
+;;      place: GLEIF ja 東新町１番地 (full-width １; row gleif-legal-address),
+;;      NTA / gBizINFO 愛知県名古屋市東区東新町１番地 (full-width １; rows
+;;      nta-head-office, gbiz-head-office), and the issuer's
+;;      名古屋市東区東新町1番地 (half-width 1; row issuer-profile-address).
+;;      GLEIF's English alternative address "1, Higashi-shincho" (row
+;;      gleif-legal-address-en) and postal code 461-8680 (rows
+;;      gleif-postal-code, issuer-profile-postal) tie them together.
+;;   4. The GLEIF JSON body serves non-ASCII as literal \uXXXX escapes, so the
+;;      Japanese-text GLEIF rows below match those escape sequences (written in
+;;      this EDN with doubled backslashes), while the NTA / gBizINFO / issuer
+;;      pages serve raw UTF-8 and their rows match the characters directly.
+;;      Two encodings, one legal name.
+;;   5. The two nta-* provenance rows (nta-designation-date, nta-furigana) are
+;;      the NTA page's unique voice: the corporate number's designation date
+;;      平成27年10月5日 (2015-10-05, when the corporate-number system assigned
+;;      numbers to existing companies -- NOT a founding date; see wrinkle 1)
+;;      and the official katakana reading チュウブデンリョク. Unlike the
+;;      neighbouring Tokyo Gas record in this catalog family, this NTA page
+;;      carries no merger history rows -- its change history is name/address
+;;      metadata only (last updated 平成30年4月6日). An absence, not a drift.
+;;   6. Rows issuer-ir-ticker-link / issuer-ir-venue-label assert exactly what
+;;      the issuer's IR top page carries server-side: a quote link to the
+;;      Tokyo Stock Exchange's stock search with code 9502, labelled
+;;      株価情報（東京証券取引所）. They do NOT assert the README's market
+;;      segment claim "TSE Prime" -- no row below does. The deeper venue
+;;      connection is GLEIF's: the managing LOU of this very LEI record is
+;;      Tokyo Stock Exchange, Inc. itself (rows gleif-managing-lou, lou-lei,
+;;      lou-legal-name-en).
+
+{:catalog/subject
+ #:company{:legal-name "中部電力株式会社"
+           :legal-name-en "Chubu Electric Power Co., Inc."
+           :lei "529900A76GOP0PGNHT63"
+           :jurisdiction "JP"
+           :registered-at "RA000412"
+           :registered-as "1800-01-017428"
+           :corporate-number "3180001017428"
+           :legal-form "T417"
+           :website "https://www.chuden.co.jp"}
+ :catalog/authorities
+ [{:authority/id :gleif
+   :authority/name "Global Legal Entity Identifier Foundation"
+   :authority/root "https://api.gleif.org/"}
+  {:authority/id :nta
+   :authority/name "National Tax Agency (国税庁), Corporate Number Publication Site"
+   :authority/root "https://www.houjin-bangou.nta.go.jp/"}
+  {:authority/id :gbizinfo
+   :authority/name "gBizINFO (経済産業省), cross-ministry corporate-information aggregator"
+   :authority/root "https://info.gbiz.go.jp/"}
+  {:authority/id :issuer
+   :authority/name "Chubu Electric Power Co., Inc., at its own published website"
+   :authority/root "https://www.chuden.co.jp/"}]
+ :catalog/unreachable
+ [{:unreachable/authority "Tokyo Stock Exchange / JPX per-issue quote page"
+   :unreachable/url "https://quote.jpx.co.jp/jpx/template/quote.cgi?F=tmp/stock_detail&MKTN=T&QCODE=9502"
+   :unreachable/observed "HTTP 404 (measured 2026-08-22 with this gate's User-Agent)"
+   :unreachable/consequence "No JPX-voice row for ticker 9502 exists below. The venue connection is cited instead through the issuer's own IR page (rows issuer-ir-ticker-link, issuer-ir-venue-label) and through GLEIF: the managing LOU of this LEI record is Tokyo Stock Exchange, Inc. itself (rows gleif-managing-lou, lou-lei, lou-legal-name-en). The README's segment claim (TSE Prime) is not asserted by this catalog."}]
+ :catalog/entries
+ [;; ── GLEIF: the LEI record itself ─────────────────────────────────────────
+  {:cite/id "gleif-lei"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"lei\":\"529900A76GOP0PGNHT63\""
+   :cite/claim "GLEIF issues LEI 529900A76GOP0PGNHT63."}
+  {:cite/id "gleif-legal-name-ja"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"legalName\":{\"name\":\"\\u4e2d\\u90e8\\u96fb\\u529b\\u682a\\u5f0f\\u4f1a\\u793e\",\"language\":\"ja\"}"
+   :cite/claim "The registered legal name is 中部電力株式会社 (language ja; the raw JSON carries it as \\u escapes -- wrinkle 4)."}
+  {:cite/id "gleif-legal-name-en"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"name\":\"Chubu Electric Power Co., Inc.\",\"language\":\"en\""
+   :cite/claim "GLEIF records the alternative-language legal name Chubu Electric Power Co., Inc. (one of three English renderings -- wrinkle 2)."}
+  {:cite/id "gleif-entity-status"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"status\":\"ACTIVE\""
+   :cite/claim "The entity status is ACTIVE."}
+  {:cite/id "gleif-jurisdiction"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"jurisdiction\":\"JP\""
+   :cite/claim "The jurisdiction is JP."}
+  {:cite/id "gleif-legal-form"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"legalForm\":{\"id\":\"T417\""
+   :cite/claim "The entity legal form is T417 (株式会社, kabusiki gaisya, per GLEIF's entity-legal-form code list)."}
+  {:cite/id "gleif-creation-date"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"creationDate\":\"1951-04-30T15:00:00Z\""
+   :cite/claim "GLEIF's entity creation date is 1951-04-30T15:00:00Z -- UTC for 1951-05-01 JST, the founding date the issuer prints (wrinkle 1, row issuer-profile-founded)."}
+  ;; ── GLEIF: the commercial register behind the record ────────────────────
+  {:cite/id "gleif-registered-at"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"registeredAt\":{\"id\":\"RA000412\""
+   :cite/claim "The register of record is RA000412 (resolved by row ra412-organisation to the Legal Affairs Bureau, 法務局)."}
+  {:cite/id "gleif-registered-as"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"registeredAs\":\"1800-01-017428\""
+   :cite/claim "The company registration number (会社法人等番号) is 1800-01-017428 -- the same 12 digits under the NTA corporate number's check digit (see header)."}
+  {:cite/id "gleif-validated-at"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"validatedAt\":{\"id\":\"RA000412\""
+   :cite/claim "The validation authority is the same register, RA000412."}
+  {:cite/id "gleif-validated-as"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"validatedAs\":\"1800-01-017428\""
+   :cite/claim "GLEIF validated the entity against the same registration number."}
+  {:cite/id "gleif-corroboration"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"corroborationLevel\":\"FULLY_CORROBORATED\""
+   :cite/claim "The registration is FULLY_CORROBORATED against the register of record."}
+  {:cite/id "gleif-registration-status"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"status\":\"ISSUED\""
+   :cite/claim "The LEI registration status is ISSUED."}
+  {:cite/id "gleif-ocid"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"ocid\":\"jp\\/3180001017428\""
+   :cite/claim "GLEIF's OpenCorporates id jp/3180001017428 prints the NTA-form corporate number inside the GLEIF body itself (see header)."}
+  ;; ── GLEIF: the registered address ────────────────────────────────────────
+  {:cite/id "gleif-legal-address"
+   :cite/authority :gleif
+   :cite/row-kind :address
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"addressLines\":[\"\\u6771\\u65b0\\u753a\\uff11\\u756a\\u5730\"]"
+   :cite/claim "The legal address line is 東新町１番地 (full-width １, as \\u escapes -- wrinkles 3 and 4)."}
+  {:cite/id "gleif-legal-address-en"
+   :cite/authority :gleif
+   :cite/row-kind :address
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"addressLines\":[\"1, Higashi-shincho\"]"
+   :cite/claim "GLEIF's English alternative address line is 1, Higashi-shincho (wrinkle 3)."}
+  {:cite/id "gleif-postal-code"
+   :cite/authority :gleif
+   :cite/row-kind :address
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"postalCode\":\"461-8680\""
+   :cite/claim "The legal-address postal code is 461-8680."}
+  ;; ── GLEIF: the managing LOU is the Tokyo Stock Exchange itself ──────────
+  {:cite/id "gleif-managing-lou"
+   :cite/authority :gleif
+   :cite/row-kind :venue
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63"
+   :cite/expect-substring "\"managingLou\":\"353800279ADEFGKNTV65\""
+   :cite/claim "The managing LOU of this LEI record is 353800279ADEFGKNTV65 (resolved by rows lou-lei / lou-legal-name-en to Tokyo Stock Exchange, Inc.)."}
+  {:cite/id "lou-lei"
+   :cite/authority :gleif
+   :cite/row-kind :venue
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63/managing-lou"
+   :cite/expect-substring "\"lei\":\"353800279ADEFGKNTV65\""
+   :cite/claim "The managing-lou relationship resolves to LEI 353800279ADEFGKNTV65."}
+  {:cite/id "lou-legal-name-en"
+   :cite/authority :gleif
+   :cite/row-kind :venue
+   :cite/url "https://api.gleif.org/api/v1/lei-records/529900A76GOP0PGNHT63/managing-lou"
+   :cite/expect-substring "\"name\":\"Tokyo Stock Exchange, Inc.\",\"language\":\"en\""
+   :cite/claim "That LOU is Tokyo Stock Exchange, Inc. -- the exchange operator is the LEI issuer of record for this company (wrinkle 6)."}
+  ;; ── GLEIF: what RA000412 is ──────────────────────────────────────────────
+  {:cite/id "ra412-register-name"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/registration-authorities/RA000412"
+   :cite/expect-substring "\"internationalName\":\"Companies Registration\""
+   :cite/claim "RA000412 is Companies Registration (登記)."}
+  {:cite/id "ra412-organisation"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/registration-authorities/RA000412"
+   :cite/expect-substring "\"internationalOrganizationName\":\"Legal Affairs Bureau\""
+   :cite/claim "RA000412 is operated by the Legal Affairs Bureau (法務局)."}
+  ;; ── National Tax Agency: the state's own per-entity page ────────────────
+  {:cite/id "nta-legal-name"
+   :cite/authority :nta
+   :cite/row-kind :identity
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=3180001017428"
+   :cite/expect-substring "中部電力株式会社"
+   :cite/claim "The NTA prints the same legal name 中部電力株式会社."}
+  {:cite/id "nta-corporate-number"
+   :cite/authority :nta
+   :cite/row-kind :register
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=3180001017428"
+   :cite/expect-substring "3180001017428"
+   :cite/claim "The corporate number (法人番号) is 3180001017428 -- check digit 3 over the register's 12 digits (see header)."}
+  {:cite/id "nta-head-office"
+   :cite/authority :nta
+   :cite/row-kind :address
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=3180001017428"
+   :cite/expect-substring "愛知県名古屋市東区東新町１番地"
+   :cite/claim "The NTA prints the head office 愛知県名古屋市東区東新町１番地 (full-width １ -- wrinkle 3)."}
+  {:cite/id "nta-designation-date"
+   :cite/authority :nta
+   :cite/row-kind :provenance
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=3180001017428"
+   :cite/expect-substring "平成27年10月5日"
+   :cite/claim "The corporate number was designated 平成27年10月5日 (2015-10-05) -- the NTA's unique voice on this identifier's provenance, not a founding date (wrinkle 5)."}
+  {:cite/id "nta-furigana"
+   :cite/authority :nta
+   :cite/row-kind :provenance
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=3180001017428"
+   :cite/expect-substring "チュウブデンリョク"
+   :cite/claim "The NTA carries the official katakana reading チュウブデンリョク -- a fact no other cited voice has (wrinkle 5)."}
+  ;; ── gBizINFO: METI's separately-operated aggregator ─────────────────────
+  {:cite/id "gbiz-legal-name"
+   :cite/authority :gbizinfo
+   :cite/row-kind :identity
+   :cite/url "https://info.gbiz.go.jp/hojin/ichiran?hojinBango=3180001017428"
+   :cite/expect-substring "中部電力株式会社"
+   :cite/claim "gBizINFO prints the same legal name 中部電力株式会社."}
+  {:cite/id "gbiz-corporate-number"
+   :cite/authority :gbizinfo
+   :cite/row-kind :register
+   :cite/url "https://info.gbiz.go.jp/hojin/ichiran?hojinBango=3180001017428"
+   :cite/expect-substring "3180001017428"
+   :cite/claim "gBizINFO keys the entity by the same corporate number 3180001017428."}
+  {:cite/id "gbiz-head-office"
+   :cite/authority :gbizinfo
+   :cite/row-kind :address
+   :cite/url "https://info.gbiz.go.jp/hojin/ichiran?hojinBango=3180001017428"
+   :cite/expect-substring "愛知県名古屋市東区東新町１番地"
+   :cite/claim "gBizINFO prints the same head office 愛知県名古屋市東区東新町１番地."}
+  ;; ── The issuer: the page this repository archives ───────────────────────
+  {:cite/id "issuer-privacy-title"
+   :cite/authority :issuer
+   :cite/row-kind :archive-subject
+   :cite/url "https://www.chuden.co.jp/privacy/"
+   :cite/expect-substring "<title>個人情報のお取扱いについて｜中部電力</title>"
+   :cite/claim "The privacy-policy page this repository archives (80-data/public/tos.journal.edn, :tos/source-url) is live and still titled 個人情報のお取扱いについて."}
+  {:cite/id "issuer-privacy-legal-name"
+   :cite/authority :issuer
+   :cite/row-kind :archive-subject
+   :cite/url "https://www.chuden.co.jp/privacy/"
+   :cite/expect-substring "中部電力株式会社"
+   :cite/claim "The archived privacy page carries the full legal name 中部電力株式会社."}
+  ;; ── The issuer: its own company-outline page ────────────────────────────
+  {:cite/id "issuer-profile-legal-name"
+   :cite/authority :issuer
+   :cite/row-kind :identity
+   :cite/url "https://www.chuden.co.jp/corporate/company/com_outline/"
+   :cite/expect-substring "中部電力株式会社"
+   :cite/claim "The issuer's company outline prints the legal name 中部電力株式会社."}
+  {:cite/id "issuer-profile-name-en"
+   :cite/authority :issuer
+   :cite/row-kind :identity
+   :cite/url "https://www.chuden.co.jp/corporate/company/com_outline/"
+   :cite/expect-substring "Chubu Electric Power Company,Incorporated"
+   :cite/claim "The issuer renders its English name Chubu Electric Power Company,Incorporated -- cited exactly as printed, comma unspaced (wrinkle 2)."}
+  {:cite/id "issuer-profile-founded"
+   :cite/authority :issuer
+   :cite/row-kind :identity
+   :cite/url "https://www.chuden.co.jp/corporate/company/com_outline/"
+   :cite/expect-substring "1951年（昭和26年）5月1日"
+   :cite/claim "The issuer prints its founding date 1951年（昭和26年）5月1日 -- the same instant as GLEIF's creationDate (wrinkle 1)."}
+  {:cite/id "issuer-profile-address"
+   :cite/authority :issuer
+   :cite/row-kind :address
+   :cite/url "https://www.chuden.co.jp/corporate/company/com_outline/"
+   :cite/expect-substring "名古屋市東区東新町1番地"
+   :cite/claim "The issuer prints its head office 名古屋市東区東新町1番地 (half-width 1 -- wrinkle 3)."}
+  {:cite/id "issuer-profile-postal"
+   :cite/authority :issuer
+   :cite/row-kind :address
+   :cite/url "https://www.chuden.co.jp/corporate/company/com_outline/"
+   :cite/expect-substring "461-8680"
+   :cite/claim "The issuer prints the same postal code 461-8680 GLEIF records (rows gleif-postal-code)."}
+  {:cite/id "issuer-profile-capital"
+   :cite/authority :issuer
+   :cite/row-kind :profile
+   :cite/url "https://www.chuden.co.jp/corporate/company/com_outline/"
+   :cite/expect-substring "4,307億円"
+   :cite/claim "The issuer states its capital as 4,307億円 (as published 2026-08-22; a future restatement would surface here as DRIFT, which is the point)."}
+  ;; ── The issuer: its IR page names the venue and the code ────────────────
+  {:cite/id "issuer-ir-ticker-link"
+   :cite/authority :issuer
+   :cite/row-kind :venue
+   :cite/url "https://www.chuden.co.jp/ir/"
+   :cite/expect-substring "StockSearch.do?method=&topSearchStr=9502"
+   :cite/claim "The issuer's IR top page links its stock quote to the Tokyo Stock Exchange's stock search with code 9502 (wrinkle 6; asserts the code, not the market segment)."}
+  {:cite/id "issuer-ir-venue-label"
+   :cite/authority :issuer
+   :cite/row-kind :venue
+   :cite/url "https://www.chuden.co.jp/ir/"
+   :cite/expect-substring "株価情報（東京証券取引所）"
+   :cite/claim "The issuer labels that link 株価情報（東京証券取引所） -- naming the venue in its own voice (wrinkle 6)."}]}
