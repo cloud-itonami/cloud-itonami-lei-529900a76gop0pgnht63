@@ -23,7 +23,7 @@ Part of the **worldwide-scope extension** of the cloud-itonami-lei catalog (batc
 - `facts/catalog.edn` — live-checked public-register citations for this entity
   (GLEIF, 国税庁法人番号公表サイト, gBizINFO, and the issuer's own pages), with
   the honest wrinkles between those voices documented in the file header.
-- `tools/verify_citations.cljs` — the gate for `facts/catalog.edn`: every row's
+- `tools/verify_citations.cljk` — the gate for `facts/catalog.edn`: every row's
   URL must answer HTTP 2xx and carry its expected substring. Drift exits 1;
   "could not answer" (parse failure, zero checks, floor miss) exits 2, never 0.
 - `NOTICE` — copyright/attribution statement for the archived third-party text.
